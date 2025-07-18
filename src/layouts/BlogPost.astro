@@ -16,41 +16,285 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 		<BaseHead title={title} description={description} />
 		<style>
 			main {
-				width: calc(100% - 2em);
-				max-width: 100%;
-				margin: 0;
+				padding: 0;
 			}
+
 			.hero-image {
 				width: 100%;
+				aspect-ratio: 2/1;
+				overflow: hidden;
+				position: relative;
 			}
+
 			.hero-image img {
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
 				display: block;
-				margin: 0 auto;
-				border-radius: 12px;
-				box-shadow: var(--box-shadow);
 			}
+
 			.prose {
-				width: 720px;
-				max-width: calc(100% - 2em);
-				margin: auto;
-				padding: 1em;
-				color: rgb(var(--gray-dark));
+				max-width: 800px;
+				margin: 0 auto;
+				padding: 3rem 2rem;
+				color: var(--text-secondary);
+				line-height: 1.7;
 			}
-			.title {
-				margin-bottom: 1em;
-				padding: 1em 0;
+
+			.article-header {
 				text-align: center;
-				line-height: 1;
+				margin-bottom: 3rem;
+				padding-bottom: 2rem;
+				border-bottom: 1px solid var(--border);
 			}
-			.title h1 {
-				margin: 0 0 0.5em 0;
+
+			.article-title {
+				font-size: 2.5rem;
+				margin-bottom: 1rem;
+				color: var(--text);
+				line-height: 1.2;
+				letter-spacing: -0.025em;
 			}
-			.date {
-				margin-bottom: 0.5em;
-				color: rgb(var(--gray));
+
+			.article-meta {
+				display: flex;
+				gap: 1rem;
+				justify-content: center;
+				align-items: center;
+				color: var(--text-muted);
+				font-size: 0.9rem;
 			}
-			.last-updated-on {
+
+			.article-meta .divider {
+				width: 4px;
+				height: 4px;
+				background: var(--text-muted);
+				border-radius: 50%;
+			}
+
+			.last-updated {
 				font-style: italic;
+				color: var(--text-muted);
+			}
+
+			/* Enhanced typography for blog content */
+			.prose :global(h1),
+			.prose :global(h2),
+			.prose :global(h3),
+			.prose :global(h4),
+			.prose :global(h5),
+			.prose :global(h6) {
+				color: var(--text);
+				margin-top: 2rem;
+				margin-bottom: 1rem;
+				font-weight: 700;
+				line-height: 1.25;
+			}
+
+			.prose :global(h2) {
+				font-size: 1.875rem;
+				padding-bottom: 0.5rem;
+				border-bottom: 1px solid var(--border);
+			}
+
+			.prose :global(h3) {
+				font-size: 1.5rem;
+			}
+
+			.prose :global(h4) {
+				font-size: 1.25rem;
+			}
+
+			.prose :global(p) {
+				margin-bottom: 1.5rem;
+				line-height: 1.7;
+			}
+
+			.prose :global(ul),
+			.prose :global(ol) {
+				margin-bottom: 1.5rem;
+				padding-left: 1.5rem;
+			}
+
+			.prose :global(li) {
+				margin-bottom: 0.5rem;
+				line-height: 1.6;
+			}
+
+			.prose :global(blockquote) {
+				margin: 2rem 0;
+				padding: 1.5rem 2rem;
+				background: var(--surface);
+				border-left: 4px solid var(--accent);
+				border-radius: 0 0.5rem 0.5rem 0;
+				font-style: italic;
+				position: relative;
+			}
+
+			.prose :global(blockquote)::before {
+				content: '"';
+				font-size: 4rem;
+				color: var(--accent);
+				position: absolute;
+				top: -10px;
+				left: 10px;
+				line-height: 1;
+				opacity: 0.3;
+			}
+
+			.prose :global(table) {
+				width: 100%;
+				margin: 2rem 0;
+				border-collapse: collapse;
+				background: var(--surface);
+				border-radius: 0.5rem;
+				overflow: hidden;
+				box-shadow: var(--shadow);
+			}
+
+			.prose :global(th),
+			.prose :global(td) {
+				padding: 0.75rem 1rem;
+				text-align: left;
+				border-bottom: 1px solid var(--border);
+			}
+
+			.prose :global(th) {
+				background: var(--surface-alt);
+				font-weight: 600;
+				color: var(--text);
+			}
+
+			.prose :global(img) {
+				max-width: 100%;
+				height: auto;
+				margin: 2rem auto;
+				display: block;
+				border-radius: 0.5rem;
+				box-shadow: var(--shadow-lg);
+			}
+
+			.prose :global(hr) {
+				margin: 3rem 0;
+				border: none;
+				height: 1px;
+				background: linear-gradient(to right, transparent, var(--border), transparent);
+			}
+
+			/* Enhanced code styling */
+			.prose :global(code) {
+				padding: 0.25rem 0.5rem;
+				background: var(--code-bg);
+				border: 1px solid var(--code-border);
+				border-radius: 0.375rem;
+				font-size: 0.875em;
+				font-family: 'Fira Code', 'JetBrains Mono', 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, monospace;
+				color: var(--accent);
+				font-weight: 500;
+			}
+
+			.prose :global(pre) {
+				margin: 2rem 0;
+				padding: 1.5rem;
+				background: var(--pre-bg) !important;
+				color: var(--pre-text);
+				border-radius: 0.5rem;
+				overflow-x: auto;
+				box-shadow: var(--shadow-lg);
+				border: 1px solid var(--border);
+				position: relative;
+				line-height: 1.5;
+			}
+
+			.prose :global(pre)::before {
+				content: '';
+				position: absolute;
+				top: 0;
+				left: 0;
+				right: 0;
+				height: 2px;
+				background: linear-gradient(90deg, var(--primary), var(--accent));
+			}
+
+			/* Copy button styles - using more specific selectors */
+			.prose :global(.copy-button) {
+				position: absolute;
+				top: 0.75rem;
+				right: 0.75rem;
+				background: var(--surface);
+				border: 1px solid var(--border);
+				color: var(--text-secondary);
+				padding: 0.5rem 0.75rem;
+				border-radius: 0.375rem;
+				cursor: pointer;
+				opacity: 0;
+				transition: var(--transition);
+				z-index: 10;
+				font-size: 0.75rem;
+				font-weight: 500;
+				display: flex;
+				align-items: center;
+				gap: 0.375rem;
+				box-shadow: var(--shadow);
+				backdrop-filter: blur(8px);
+				font-family: inherit;
+			}
+
+			.prose :global(pre:hover .copy-button) {
+				opacity: 1;
+			}
+
+			.prose :global(.copy-button:hover) {
+				background: var(--accent);
+				color: white;
+				border-color: var(--accent);
+				transform: scale(1.02);
+			}
+
+			.prose :global(.copy-button.copied) {
+				background: #10b981;
+				color: white;
+				border-color: #10b981;
+			}
+
+			.prose :global(.copy-button svg) {
+				width: 14px;
+				height: 14px;
+				flex-shrink: 0;
+			}
+
+			.prose :global(pre code) {
+				padding: 0;
+				background: none;
+				border: none;
+				color: inherit;
+				font-size: 0.875rem;
+			}
+
+			@media (max-width: 768px) {
+				.prose {
+					padding: 2rem 1rem;
+				}
+
+				.article-title {
+					font-size: 2rem;
+				}
+
+				.article-meta {
+					flex-direction: column;
+					gap: 0.5rem;
+				}
+
+				.article-meta .divider {
+					display: none;
+				}
+
+				.prose :global(pre) {
+					padding: 1rem;
+					margin-left: -1rem;
+					margin-right: -1rem;
+					border-radius: 0;
+				}
 			}
 		</style>
 	</head>
@@ -59,28 +303,127 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 		<Header />
 		<main>
 			<article>
-				<div class="hero-image">
-					{heroImage && <Image width={1020} height={510} src={heroImage} alt="" />}
-				</div>
-				<div class="prose">
-					<div class="title">
-						<div class="date">
-							<FormattedDate date={pubDate} />
-							{
-								updatedDate && (
-									<div class="last-updated-on">
-										Last updated on <FormattedDate date={updatedDate} />
-									</div>
-								)
-							}
-						</div>
-						<h1>{title}</h1>
-						<hr />
+				{heroImage && (
+					<div class="hero-image">
+						<Image width={1200} height={600} src={heroImage} alt={title} />
 					</div>
-					<slot />
+				)}
+				<div class="prose">
+					<header class="article-header">
+						<h1 class="article-title">{title}</h1>
+						<div class="article-meta">
+							<time><FormattedDate date={pubDate} /></time>
+							{updatedDate && (
+								<>
+									<div class="divider"></div>
+									<div class="last-updated">
+										Updated <FormattedDate date={updatedDate} />
+									</div>
+								</>
+							)}
+						</div>
+					</header>
+					<div class="article-content">
+						<slot />
+					</div>
 				</div>
 			</article>
 		</main>
 		<Footer />
+		<script>
+			// Add copy buttons to code blocks
+			function addCopyButtons() {
+				const codeBlocks = document.querySelectorAll('pre');
+				
+				codeBlocks.forEach((block) => {
+					// Skip if button already exists
+					if (block.querySelector('.copy-button')) return;
+					
+					// Ensure the pre block has relative positioning
+					if (getComputedStyle(block).position === 'static') {
+						block.style.position = 'relative';
+					}
+					
+					const button = document.createElement('button');
+					button.className = 'copy-button';
+					button.type = 'button';
+					button.setAttribute('aria-label', 'Copy code to clipboard');
+					button.innerHTML = `
+						<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+							<rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+							<path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+						</svg>
+						<span>Copy</span>
+					`;
+					
+					button.addEventListener('click', async () => {
+						const code = block.querySelector('code');
+						if (code) {
+							try {
+								await navigator.clipboard.writeText(code.textContent);
+								button.innerHTML = `
+									<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+										<polyline points="20,6 9,17 4,12"></polyline>
+									</svg>
+									<span>Copied!</span>
+								`;
+								button.classList.add('copied');
+								
+								setTimeout(() => {
+									button.innerHTML = `
+										<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+											<rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+											<path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+										</svg>
+										<span>Copy</span>
+									`;
+									button.classList.remove('copied');
+								}, 2000);
+							} catch (err) {
+								console.error('Failed to copy code:', err);
+								// Fallback for older browsers
+								try {
+									const textArea = document.createElement('textarea');
+									textArea.value = code.textContent;
+									document.body.appendChild(textArea);
+									textArea.select();
+									document.execCommand('copy');
+									document.body.removeChild(textArea);
+									
+									button.innerHTML = `
+										<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+											<polyline points="20,6 9,17 4,12"></polyline>
+										</svg>
+										<span>Copied!</span>
+									`;
+									button.classList.add('copied');
+									
+									setTimeout(() => {
+										button.innerHTML = `
+											<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+												<rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+												<path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+											</svg>
+											<span>Copy</span>
+										`;
+										button.classList.remove('copied');
+									}, 2000);
+								} catch (fallbackErr) {
+									console.error('Fallback copy failed:', fallbackErr);
+								}
+							}
+						}
+					});
+					
+					block.appendChild(button);
+				});
+			}
+
+			// Initialize copy buttons when page loads
+			document.addEventListener('DOMContentLoaded', addCopyButtons);
+			
+			// Re-initialize on navigation (for SPA-like behavior)
+			document.addEventListener('astro:page-load', addCopyButtons);
+		</script>
 	</body>
 </html>

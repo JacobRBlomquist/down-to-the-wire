@@ -1,0 +1,103 @@
+---
+// Theme Toggle Component
+---
+
+<button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
+	<svg class="sun-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+		<circle cx="12" cy="12" r="5"></circle>
+		<path d="m12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"></path>
+	</svg>
+	<svg class="moon-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+		<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+	</svg>
+</button>
+
+<style>
+	.theme-toggle {
+		position: relative;
+		background: none;
+		border: 2px solid var(--border);
+		border-radius: 0.5rem;
+		padding: 0.5rem;
+		cursor: pointer;
+		transition: var(--transition);
+		color: var(--text);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 44px;
+		height: 44px;
+	}
+
+	.theme-toggle:hover {
+		background: var(--surface);
+		border-color: var(--accent);
+		transform: scale(1.05);
+	}
+
+	.theme-toggle:focus {
+		outline: none;
+		box-shadow: 0 0 0 2px var(--accent);
+	}
+
+	.sun-icon,
+	.moon-icon {
+		position: absolute;
+		transition: var(--transition);
+	}
+
+	.sun-icon {
+		opacity: 1;
+		transform: rotate(0deg);
+	}
+
+	.moon-icon {
+		opacity: 0;
+		transform: rotate(180deg);
+	}
+
+	[data-theme="dark"] .sun-icon {
+		opacity: 0;
+		transform: rotate(180deg);
+	}
+
+	[data-theme="dark"] .moon-icon {
+		opacity: 1;
+		transform: rotate(0deg);
+	}
+</style>
+
+<script>
+	function initTheme() {
+		const theme = localStorage.getItem('theme') || 'light';
+		document.documentElement.setAttribute('data-theme', theme);
+	}
+
+	function toggleTheme() {
+		const currentTheme = document.documentElement.getAttribute('data-theme');
+		const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+		
+		document.documentElement.setAttribute('data-theme', newTheme);
+		localStorage.setItem('theme', newTheme);
+	}
+
+	// Initialize theme on page load
+	initTheme();
+
+	// Add click handler
+	document.addEventListener('DOMContentLoaded', () => {
+		const themeToggle = document.getElementById('theme-toggle');
+		if (themeToggle) {
+			themeToggle.addEventListener('click', toggleTheme);
+		}
+	});
+
+	// Handle navigation (for SPA-like behavior)
+	document.addEventListener('astro:page-load', () => {
+		initTheme();
+		const themeToggle = document.getElementById('theme-toggle');
+		if (themeToggle) {
+			themeToggle.addEventListener('click', toggleTheme);
+		}
+	});
+</script>

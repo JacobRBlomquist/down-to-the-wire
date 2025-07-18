@@ -3,6 +3,13 @@ import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+import { getCollection } from 'astro:content';
+import FormattedDate from '../components/FormattedDate.astro';
+import { Image } from 'astro:assets';
+
+const posts = (await getCollection('blog')).sort(
+	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+).slice(0, 3);
 ---
 
 <!doctype html>
@@ -13,37 +20,342 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 	<body>
 		<Header />
 		<main>
-			<h1>🧑‍🚀 Hello, Astronaut!</h1>
-			<p>
-				Welcome to the official <a href="https://astro.build/">Astro</a> blog starter template. This
-				template serves as a lightweight, minimally-styled starting point for anyone looking to build
-				a personal website, blog, or portfolio with Astro.
-			</p>
-			<p>
-				This template comes with a few integrations already configured in your
-				<code>astro.config.mjs</code> file. You can customize your setup with
-				<a href="https://astro.build/integrations">Astro Integrations</a> to add tools like Tailwind,
-				React, or Vue to your project.
-			</p>
-			<p>Here are a few ideas on how to get started with the template:</p>
-			<ul>
-				<li>Edit this page in <code>src/pages/index.astro</code></li>
-				<li>Edit the site header items in <code>src/components/Header.astro</code></li>
-				<li>Add your name to the footer in <code>src/components/Footer.astro</code></li>
-				<li>Check out the included blog posts in <code>src/content/blog/</code></li>
-				<li>Customize the blog post page layout in <code>src/layouts/BlogPost.astro</code></li>
-			</ul>
-			<p>
-				Have fun! If you get stuck, remember to
-				<a href="https://docs.astro.build/">read the docs</a>
-				or <a href="https://astro.build/chat">join us on Discord</a> to ask questions.
-			</p>
-			<p>
-				Looking for a blog template with a bit more personality? Check out
-				<a href="https://github.com/Charca/astro-blog-template">astro-blog-template</a>
-				by <a href="https://twitter.com/Charca">Maxi Ferreira</a>.
-			</p>
+			<!-- Hero Section -->
+			<section class="hero">
+				<div class="container">
+					<div class="hero-content">
+						<h1 class="hero-title">Down to the Wire</h1>
+						<p class="hero-subtitle">
+							Exploring the intricate world of <strong>low-level networking algorithms</strong> and
+							system design patterns that power our connected world.
+						</p>
+						<div class="hero-actions">
+							<a href="/blog" class="btn">Read Latest Posts</a>
+							<a href="/about" class="btn btn-outline">About Me</a>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- Recent Posts Section -->
+			<section class="recent-posts">
+				<div class="container">
+					<div class="section-header">
+						<h2>Recent Posts</h2>
+						<p>Deep dives into networking protocols, algorithms, and system design</p>
+					</div>
+					<div class="posts-grid">
+						{posts.map((post) => (
+							<article class="post-card">
+								<a href={`/blog/${post.id}/`}>
+									{post.data.heroImage && (
+										<div class="post-image">
+											<Image width={400} height={200} src={post.data.heroImage} alt={post.data.title} />
+										</div>
+									)}
+									<div class="post-content">
+										<h3 class="post-title">{post.data.title}</h3>
+										<p class="post-description">{post.data.description}</p>
+										<div class="post-meta">
+											<FormattedDate date={post.data.pubDate} />
+										</div>
+									</div>
+								</a>
+							</article>
+						))}
+					</div>
+					<div class="view-all">
+						<a href="/blog" class="btn btn-outline">View All Posts</a>
+					</div>
+				</div>
+			</section>
+
+			<!-- About Section -->
+			<section class="about-preview">
+				<div class="container">
+					<div class="about-content">
+						<div class="about-text">
+							<h2>About This Blog</h2>
+							<p>
+								This blog explores the fascinating world of low-level networking algorithms,
+								from packet routing optimization to distributed consensus mechanisms.
+								We dive deep into the mathematical foundations and practical implementations
+								that make modern networking possible.
+							</p>
+							<p>
+								Topics include graph theory applications, protocol design patterns,
+								performance optimization techniques, and interactive visualizations
+								using p5.js to help illustrate complex concepts.
+							</p>
+							<a href="/about" class="btn">Learn More</a>
+						</div>
+						<div class="about-visual">
+							<div class="network-visualization">
+								<div class="node node-1"></div>
+								<div class="node node-2"></div>
+								<div class="node node-3"></div>
+								<div class="node node-4"></div>
+								<div class="connection con-1"></div>
+								<div class="connection con-2"></div>
+								<div class="connection con-3"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
 		</main>
 		<Footer />
 	</body>
 </html>
+
+<style>
+	.hero {
+		background: linear-gradient(135deg, var(--surface) 0%, var(--surface-alt) 100%);
+		padding: 6rem 0;
+		text-align: center;
+		border-bottom: 1px solid var(--border);
+	}
+
+	.hero-title {
+		font-size: 3.5rem;
+		margin-bottom: 1.5rem;
+		background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-clip: text;
+		letter-spacing: -0.02em;
+	}
+
+	.hero-subtitle {
+		font-size: 1.25rem;
+		max-width: 600px;
+		margin: 0 auto 2.5rem;
+		color: var(--text-secondary);
+		line-height: 1.6;
+	}
+
+	.hero-actions {
+		display: flex;
+		gap: 1rem;
+		justify-content: center;
+		flex-wrap: wrap;
+	}
+
+	.recent-posts {
+		padding: 5rem 0;
+	}
+
+	.section-header {
+		text-align: center;
+		margin-bottom: 3rem;
+	}
+
+	.section-header h2 {
+		font-size: 2.5rem;
+		margin-bottom: 1rem;
+	}
+
+	.section-header p {
+		font-size: 1.125rem;
+		color: var(--text-muted);
+	}
+
+	.posts-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+		gap: 2rem;
+		margin-bottom: 3rem;
+	}
+
+	.post-card {
+		background: var(--surface);
+		border: 1px solid var(--border);
+		border-radius: 0.75rem;
+		overflow: hidden;
+		transition: var(--transition);
+		box-shadow: var(--shadow);
+	}
+
+	.post-card:hover {
+		transform: translateY(-4px);
+		box-shadow: var(--shadow-lg);
+	}
+
+	.post-card a {
+		text-decoration: none;
+		color: inherit;
+		display: block;
+	}
+
+	.post-image {
+		aspect-ratio: 2/1;
+		overflow: hidden;
+	}
+
+	.post-image img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		transition: var(--transition);
+	}
+
+	.post-card:hover .post-image img {
+		transform: scale(1.05);
+	}
+
+	.post-content {
+		padding: 1.5rem;
+	}
+
+	.post-title {
+		font-size: 1.25rem;
+		margin-bottom: 0.5rem;
+		color: var(--text);
+	}
+
+	.post-description {
+		color: var(--text-secondary);
+		margin-bottom: 1rem;
+		line-height: 1.5;
+	}
+
+	.post-meta {
+		color: var(--text-muted);
+		font-size: 0.875rem;
+	}
+
+	.view-all {
+		text-align: center;
+	}
+
+	.about-preview {
+		background: var(--surface);
+		padding: 5rem 0;
+		border-top: 1px solid var(--border);
+	}
+
+	.about-content {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 4rem;
+		align-items: center;
+	}
+
+	.about-text h2 {
+		font-size: 2rem;
+		margin-bottom: 1.5rem;
+	}
+
+	.about-text p {
+		margin-bottom: 1.5rem;
+		line-height: 1.6;
+	}
+
+	.about-visual {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+
+	.network-visualization {
+		position: relative;
+		width: 300px;
+		height: 300px;
+		border-radius: 50%;
+		background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+		opacity: 0.1;
+		animation: pulse 3s ease-in-out infinite;
+	}
+
+	.node {
+		position: absolute;
+		width: 20px;
+		height: 20px;
+		background: var(--accent);
+		border-radius: 50%;
+		animation: nodeGlow 2s ease-in-out infinite;
+	}
+
+	.node-1 { top: 50px; left: 50px; animation-delay: 0s; }
+	.node-2 { top: 50px; right: 50px; animation-delay: 0.5s; }
+	.node-3 { bottom: 50px; left: 50px; animation-delay: 1s; }
+	.node-4 { bottom: 50px; right: 50px; animation-delay: 1.5s; }
+
+	.connection {
+		position: absolute;
+		background: var(--accent);
+		height: 2px;
+		opacity: 0.6;
+		animation: connectionPulse 2s ease-in-out infinite;
+	}
+
+	.con-1 {
+		top: 60px;
+		left: 70px;
+		width: 160px;
+		animation-delay: 0.2s;
+	}
+
+	.con-2 {
+		top: 60px;
+		left: 60px;
+		width: 2px;
+		height: 180px;
+		animation-delay: 0.7s;
+	}
+
+	.con-3 {
+		bottom: 60px;
+		left: 70px;
+		width: 160px;
+		animation-delay: 1.2s;
+	}
+
+	@keyframes pulse {
+		0%, 100% { opacity: 0.1; }
+		50% { opacity: 0.2; }
+	}
+
+	@keyframes nodeGlow {
+		0%, 100% { box-shadow: 0 0 5px var(--accent); }
+		50% { box-shadow: 0 0 20px var(--accent); }
+	}
+
+	@keyframes connectionPulse {
+		0%, 100% { opacity: 0.3; }
+		50% { opacity: 0.8; }
+	}
+
+	@media (max-width: 768px) {
+		.hero {
+			padding: 4rem 0;
+		}
+
+		.hero-title {
+			font-size: 2.5rem;
+		}
+
+		.hero-subtitle {
+			font-size: 1.125rem;
+		}
+
+		.hero-actions {
+			flex-direction: column;
+			align-items: center;
+		}
+
+		.posts-grid {
+			grid-template-columns: 1fr;
+		}
+
+		.about-content {
+			grid-template-columns: 1fr;
+			gap: 2rem;
+		}
+
+		.network-visualization {
+			width: 200px;
+			height: 200px;
+		}
+	}
+</style>

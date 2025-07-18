@@ -361,6 +361,69 @@ hr {
 	.container {
 		padding: 0 0.75rem;
 	}
+	
+	/* Mobile P5.js sketch responsiveness */
+	.p5-container {
+		width: 100%;
+		max-width: 100%;
+		overflow: hidden;
+	}
+	
+	.p5-container canvas {
+		max-width: 100%;
+		height: auto;
+		object-fit: contain;
+	}
+	
+	.p5-container div[id] {
+		max-width: 100% !important;
+		width: 100% !important;
+		aspect-ratio: 3/2;
+		min-height: 250px;
+	}
+	
+	.p5-container .sketch-controls {
+		flex-wrap: wrap;
+		gap: 0.75rem;
+		padding: 0.75rem;
+	}
+	
+	.p5-container .sketch-controls .control-group {
+		flex: 1;
+		min-width: 120px;
+	}
+	
+	.p5-container .sketch-controls input[type="range"] {
+		width: 80px;
+	}
+	
+	/* Mobile code block and table fixes */
+	pre {
+		overflow-x: auto;
+		max-width: 100%;
+		font-size: 0.8rem;
+		padding: 1rem;
+	}
+	
+	table {
+		display: block;
+		width: 100%;
+		overflow-x: auto;
+		white-space: nowrap;
+		font-size: 0.9rem;
+	}
+	
+	table th,
+	table td {
+		padding: 0.5rem;
+		min-width: 100px;
+	}
+	
+	/* Ensure all content respects container width */
+	main > * {
+		max-width: 100%;
+		overflow-x: auto;
+	}
 }
 
 .sr-only {

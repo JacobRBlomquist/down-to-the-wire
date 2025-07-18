@@ -13,7 +13,7 @@ const { src, title, controls = [], width = 600, height = 400, containerId } = As
 
 <div class="p5-container">
   {title && <h4 class="sketch-title">{title}</h4>}
-  <div id={containerId} style={`width: ${width}px; height: ${height}px;`}></div>
+  <div id={containerId} style={`width: ${width}px; height: ${height}px; max-width: 100%;`}></div>
   {controls.length > 0 && (
     <div class="sketch-controls">
       {controls.map((control) => (

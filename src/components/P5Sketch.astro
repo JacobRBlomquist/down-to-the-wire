@@ -1,0 +1,90 @@
+---
+export interface Props {
+  src: string;
+  title?: string;
+  controls?: any[];
+  width?: number;
+  height?: number;
+  containerId: string;
+}
+
+const { src, title, controls = [], width = 600, height = 400, containerId } = Astro.props;
+---
+
+<div class="p5-container">
+  {title && <h4 class="sketch-title">{title}</h4>}
+  <div id={containerId} style={`width: ${width}px; height: ${height}px;`}></div>
+  {controls.length > 0 && (
+    <div class="sketch-controls">
+      {controls.map((control) => (
+        <Fragment>
+          {control.type === 'button' && (
+            <button onclick={control.onclick}>{control.label}</button>
+          )}
+          {control.type === 'range' && (
+            <div class="control-group">
+              <label>{control.label}:</label>
+              <input 
+                type="range" 
+                min={control.min} 
+                max={control.max} 
+                value={control.value} 
+                onchange={control.onchange}
+              />
+            </div>
+          )}
+          {control.type === 'number' && (
+            <div class="control-group">
+              <label>{control.label}:</label>
+              <input 
+                type="number" 
+                min={control.min} 
+                max={control.max} 
+                value={control.value} 
+                onchange={control.onchange}
+              />
+            </div>
+          )}
+        </Fragment>
+      ))}
+    </div>
+  )}
+</div>
+
+<script define:vars={{ src, containerId }}>
+  // Function to load a sketch script
+  function loadSketch(scriptSrc, containerId) {
+    // Check if script is already loaded
+    if (document.querySelector(`script[src="${scriptSrc}"]`)) {
+      return;
+    }
+    
+    const script = document.createElement('script');
+    script.src = scriptSrc;
+    script.async = true;
+    script.onerror = () => {
+      console.error(`Failed to load sketch: ${scriptSrc}`);
+      const container = document.getElementById(containerId);
+      if (container) {
+        container.innerHTML = '<p style="color: red; text-align: center; padding: 2rem;">Failed to load sketch</p>';
+      }
+    };
+    
+    document.head.appendChild(script);
+  }
+
+  // Load the sketch when the component mounts
+  if (typeof window !== 'undefined') {
+    // Ensure p5.js is loaded first
+    if (typeof p5 === 'undefined') {
+      const p5Script = document.createElement('script');
+      p5Script.src = 'https://cdn.jsdelivr.net/npm/p5@1.7.0/lib/p5.min.js';
+      p5Script.onload = () => {
+        loadSketch(src, containerId);
+      };
+      document.head.appendChild(p5Script);
+    } else {
+      loadSketch(src, containerId);
+    }
+  }
+</script>

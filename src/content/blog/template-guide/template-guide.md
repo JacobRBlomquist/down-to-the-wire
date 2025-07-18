@@ -203,26 +203,157 @@ You can add descriptive captions to help explain complex diagrams or screenshots
 
 ### P5.js Sketch Container
 
-Here's how to embed an interactive p5.js sketch for visualizing network algorithms:
+Here's how to embed interactive p5.js sketches for visualizing network algorithms. Multiple sketches can be included in the same post:
+
+#### Network Packet Flow Visualization
 
 <div class="p5-container">
     <h4 class="sketch-title">Network Packet Flow Visualization</h4>
-    <div id="packet-flow-sketch"></div>
+    <div id="network-packet-flow-sketch"></div>
     <div class="sketch-controls">
         <button onclick="resetSimulation()">Reset</button>
-        <button onclick="pauseSimulation()">Pause</button>
+        <button onclick="pauseSimulation()">Pause/Resume</button>
         <div class="control-group">
             <label>Speed:</label>
-            <input type="range" min="1" max="10" value="5" onchange="updateSpeed(this.value)">
+            <input type="range" min="1" max="10" value="1" onchange="updateSpeed(this.value)">
         </div>
         <div class="control-group">
-            <label>Packets:</label>
-            <input type="number" min="1" max="50" value="10" onchange="updatePacketCount(this.value)">
+            <label>Max Packets:</label>
+            <input type="number" min="1" max="20" value="10" onchange="updatePacketCount(this.value)">
         </div>
     </div>
 </div>
 
-*Note: The p5.js sketch above would contain JavaScript code to create an interactive visualization.*
+<script src="/sketches/template-guide/network-packet-flow-sketch.js"></script>
+
+This interactive visualization shows how packets flow through a network topology. The sketch demonstrates:
+
+- **Packet Routing**: Packets travel from source to destination through intermediate nodes
+- **Network Topology**: Shows routers (blue) and switches (green) with weighted connections
+- **Real-time Animation**: Watch packets move through the network with visual trails
+- **Interactive Controls**: Adjust speed, pause/resume, and control packet generation
+
+#### TCP Congestion Control Visualization
+
+<div class="p5-container">
+    <h4 class="sketch-title">TCP Congestion Control Algorithm</h4>
+    <div id="tcp-congestion-sketch"></div>
+    <div class="sketch-controls">
+        <button onclick="resetTCPSimulation()">Reset</button>
+        <button onclick="pauseTCPSimulation()">Pause/Resume</button>
+        <button onclick="addPacketLoss()">Add Packet Loss</button>
+        <div class="control-group">
+            <label>Speed:</label>
+            <input type="range" min="1" max="5" value="1" onchange="updateTCPSpeed(this.value)">
+        </div>
+    </div>
+</div>
+
+<script src="/sketches/template-guide/tcp-congestion-sketch.js"></script>
+
+This visualization demonstrates TCP's congestion control algorithm:
+
+- **Slow Start**: Exponential growth phase (green indicator)
+- **Congestion Avoidance**: Linear growth phase (red indicator)
+- **Packet Loss Events**: Trigger multiplicative decrease
+- **Dynamic Threshold**: SSThresh adapts based on network conditions
+
+**How to use p5.js sketches with external script files:**
+
+Organize your sketches in the `public/sketches/` directory for proper serving:
+
+```
+public/sketches/your-post-name/
+├── sketch-1.js                    # First sketch
+├── sketch-2.js                    # Second sketch
+└── additional-sketch.js           # Additional sketches
+
+src/content/blog/your-post-name/
+└── your-post-name.md              # Your blog post content
+```
+
+**Steps to add sketches:**
+
+1. **Create your sketch file** in `public/sketches/your-post-name/` directory
+2. **Add the HTML container** with a unique ID in your markdown
+3. **Include the script tag** right after the container with the correct path
+4. **Make sure your sketch uses the correct parent ID**
+
+**Example implementation:**
+```html
+<!-- In your markdown content -->
+<div class="p5-container">
+    <h4 class="sketch-title">Your Sketch Title</h4>
+    <div id="your-sketch-container"></div>
+    <div class="sketch-controls">
+        <button onclick="resetYourSketch()">Reset</button>
+    </div>
+</div>
+
+<script src="/sketches/your-post-name/your-sketch-file.js"></script>
+```
+
+**Your sketch JavaScript file** (`your-sketch-file.js`):
+```javascript
+// Use p5.js instance mode to avoid variable conflicts
+const yourSketchName = (p) => {
+  let myVariable = 0;
+  let isRunning = true;
+  
+  p.setup = () => {
+    p.createCanvas(600, 400);
+    
+    // Your sketch setup code
+  };
+
+  p.draw = () => {
+    p.background(20, 25, 40);
+    
+    // Your sketch drawing code
+    // Use p.function() for all p5.js functions
+    p.fill(255);
+    p.ellipse(p.width/2, p.height/2, 50, 50);
+  };
+
+  // Control functions (make globally available for onclick handlers)
+  window.resetYourSketch = () => {
+    myVariable = 0;
+    isRunning = true;
+    // Reset logic
+  };
+  
+  window.pauseYourSketch = () => {
+    isRunning = !isRunning;
+  };
+};
+
+// Create the sketch instance when p5.js is loaded
+function initYourSketch() {
+  if (typeof p5 !== 'undefined') {
+    new p5(yourSketchName, 'your-sketch-container');
+  } else {
+    // Wait for p5.js to load
+    setTimeout(initYourSketch, 100);
+  }
+}
+
+// Initialize when DOM is ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initYourSketch);
+} else {
+  initYourSketch();
+}
+```
+
+**Key points:**
+- **Use p5.js instance mode** to avoid variable conflicts between multiple sketches
+- **Prefix all p5.js functions** with `p.` (e.g., `p.createCanvas()`, `p.fill()`, `p.ellipse()`)
+- **Wait for p5.js to load** before creating sketch instances to avoid undefined errors
+- **Use absolute paths** like `/sketches/your-post-name/your-sketch-file.js` 
+- **Store sketch files** in the `public/sketches/` directory for proper serving
+- **Make control functions global** via `window.functionName` for onclick handlers
+- **Organize by post name** for easy management
+- **Multiple sketches per post** work without conflicts thanks to instance mode
 
 ## Horizontal Rules
 

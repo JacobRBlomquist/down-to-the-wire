@@ -9,6 +9,10 @@ import { Image } from 'astro:assets';
 type Props = CollectionEntry<'blog'>['data'];
 
 const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
+
+// Extract slug from URL for sketch loading
+const url = Astro.url.pathname;
+const slug = url.split('/').pop() || '';
 ---
 
 <html lang="en">
@@ -330,6 +334,12 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 			</article>
 		</main>
 		<Footer />
+		
+		<!-- p5.js CDN -->
+		<script src="https://cdn.jsdelivr.net/npm/p5@1.7.0/lib/p5.min.js"></script>
+		
+		<!-- Note: p5.js sketches are now loaded via direct script tags in markdown -->
+		
 		<script>
 			// Add copy buttons to code blocks
 			function addCopyButtons() {

@@ -21,9 +21,9 @@ const tcpCongestionSketch = (p) => {
     events = [];
     
     // Add some initial events
-    addEvent(50, 'timeout', 'Packet Loss');
-    addEvent(120, 'timeout', 'Packet Loss');
-    addEvent(200, 'timeout', 'Packet Loss');
+    // addEvent(50, 'timeout', 'Packet Loss');
+    // addEvent(120, 'timeout', 'Packet Loss');
+    // addEvent(200, 'timeout', 'Packet Loss');
   };
 
   p.draw = () => {
@@ -52,12 +52,12 @@ const tcpCongestionSketch = (p) => {
     
     // Normal operation - increase cwnd based on state
     if (state === 'slow_start') {
-      cwnd += 0.02 * animationSpeed; // Exponential growth
+      cwnd += 0.04 * animationSpeed; // Exponential growth
       if (cwnd >= ssthresh) {
         state = 'congestion_avoidance';
       }
     } else if (state === 'congestion_avoidance') {
-      cwnd += 0.005 * animationSpeed; // Linear growth
+      cwnd += 0.01 * animationSpeed; // Linear growth
     }
     
     // Record history
@@ -75,10 +75,10 @@ const tcpCongestionSketch = (p) => {
       }
     }
     
-    // Reset if we've gone too far
-    if (time > 300) {
-      resetTCPSimulation();
-    }
+    // // Reset if we've gone too far
+    // if (time > 300) {
+    //   resetTCPSimulation();
+    // }
   }
 
   function handleEvent(event) {
@@ -252,9 +252,9 @@ const tcpCongestionSketch = (p) => {
     
     // Reset events
     events = [];
-    addEvent(50, 'timeout', 'Packet Loss');
-    addEvent(120, 'timeout', 'Packet Loss');
-    addEvent(200, 'timeout', 'Packet Loss');
+    // addEvent(50, 'timeout', 'Packet Loss');
+    // addEvent(120, 'timeout', 'Packet Loss');
+    // addEvent(200, 'timeout', 'Packet Loss');
   }
 
   function pauseTCPSimulation() {

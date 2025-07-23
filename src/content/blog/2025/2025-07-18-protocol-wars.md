@@ -2,7 +2,7 @@
 title: 'The Great Protocol Wars'
 description: 'Explore how the 1970s-1990s Protocol Wars between TCP/IP and OSI shaped the Internet we use today, and why the "worse" technology won through pragmatic design choices that still influence modern software development'
 pubDate: 'Jul 18 2025'
-heroImage: '../../../assets/protocol-wars-hero-gen.png'
+heroImage: '@assets/protocol-wars-hero-gen.png'
 ---
 
 # The Great Protocol Wars: How TCP/IP Won the Internet

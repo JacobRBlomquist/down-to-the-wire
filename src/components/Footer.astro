@@ -8,6 +8,11 @@ const today = new Date();
 			<div class="footer-text">
 				<p>&copy; {today.getFullYear()} Jacob Blomquist. All rights reserved.</p>
 				<p>Exploring networking algorithms and system design patterns</p>
+				<div class="footer-links">
+					<a href="https://blomquist.xyz" target="_blank" rel="noopener noreferrer">Personal Website</a>
+					<span class="separator">•</span>
+					<a href="https://paypal.me/JacobRBlomquist" target="_blank" rel="noopener noreferrer">Support this work ☕</a>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -32,5 +37,41 @@ const today = new Date();
 	.footer-text p:first-child {
 		font-weight: 500;
 		color: var(--text-secondary);
+	}
+
+	.footer-links {
+		margin-top: 1rem;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		gap: 0.75rem;
+		flex-wrap: wrap;
+	}
+
+	.footer-links a {
+		color: var(--accent);
+		text-decoration: none;
+		transition: color 0.2s ease;
+	}
+
+	.footer-links a:hover {
+		color: var(--primary);
+		text-decoration: underline;
+	}
+
+	.separator {
+		color: var(--text-muted);
+		user-select: none;
+	}
+
+	@media (max-width: 480px) {
+		.footer-links {
+			flex-direction: column;
+			gap: 0.5rem;
+		}
+		
+		.separator {
+			display: none;
+		}
 	}
 </style>

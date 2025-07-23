@@ -34,7 +34,7 @@ const slug = url.split('/').pop() || '';
 
 			.hero-image {
 				width: 100%;
-				aspect-ratio: 2/1;
+				aspect-ratio: 3/2;
 				overflow: hidden;
 				position: relative;
 			}
@@ -318,7 +318,7 @@ const slug = url.split('/').pop() || '';
 			<article>
 				{heroImage && (
 					<div class="hero-image">
-						<Image width={1200} height={600} src={heroImage} alt={title} />
+						<Image width={1920} height={1080} src={heroImage} alt={title} />
 					</div>
 				)}
 				<div class="prose">
